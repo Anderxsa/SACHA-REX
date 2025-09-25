@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SACHA REX</title>
+    <style>
+
+@font-face {
+    font-family: 'Lovelo';
+    src: url('fonts/Lovelo.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    height: 100vh;
+    background: #777777ff;
+    display: flex;
+    align-items: center;
+}
+
+.titulo-superior {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    font-family: 'Lovelo', Arial, sans-serif;
+}
+
+.titulo-superior h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.titulo-superior p {
+    font-size: 18px;
+}
+
+.contenedor {
+    width: 920px;
+    height: 280px;
+    margin: 0 auto;
+    
+    position: relative;
+
+    background: linear-gradient(#b7d6c7, transparent) #fcfcfcff;/*linear-gradient(#90ebff, white);*/
+    transition: background-color 1s linear;
+    overflow: hidden;
+}
+
+.mediodia {
+    background-color: #ffdcf3;
+}
+
+.tarde {
+    background-color: rgb(230, 252, 65);
+}
+
+.noche {
+    background-color: #aca8c7;
+}
+
+.dino {
+    width: 80px;
+    height: 80px;
+
+    position: absolute;
+    bottom: 22px;
+    left: 42px;
+    z-index: 2;
+
+    background: url(img/dino.png) repeat-x 0px 0px;
+    background-size: 336px 84px;
+    background-position-x: 0px;
+
+}
+
+.dino-corriendo {
+    animation: animarDino 0.20s steps(2) infinite;
+}
+.dino-estrellado {
+    background-position-x: -252px;
+}
+
+.suelo {
+    width: 200%;
+    height: 42px;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    background: url(img/suelo.png) repeat-x 0px 0px;
+    background-size: 50% 42px;
+
+}
+
+.cactus{
+    width: 46px;
+    height: 96px;
+
+    position: absolute;
+    bottom: 16px;
+    left: 600px;
+    z-index: 1;
+
+    background: url(img/cactus1.png) no-repeat;
+}
+.cactus2{
+    width: 98px;
+    height: 66px;
+
+    background: url(img/cactus2.png) no-repeat;
+}
+
+.nube{
+    width: 92px;
+    height: 26px;
+
+    position: absolute;
+    z-index: 0;
+
+    background: url(img/nube.png) no-repeat;
+    background-size: 92px 26px;
+}
+
+.score{
+    width: 100px;
+    height: 30px;
+
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    z-index: 10;
+
+    color: 
+    #f5f5f5;
+    font-family: Verdana;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.game-over{
+    display: none;
+
+    position: absolute;
+    width: 100%;
+
+
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    font-family: Verdana;
+    font-weight: 700;
+}
+
+.marca-agua {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Lovelo', Arial, sans-serif;
+    font-size: 20px;
+    color: #ffffffcc;
+    text-shadow: 1px 1px 8px #00000055;
+    letter-spacing: 1px;
+    pointer-events: none;
+    z-index: 999;
+    user-select: none;
+    opacity: 0.85;
+    text-align: center;
+    line-height: 1.3;
+}
+
+@keyframes animarDino{
+    from{
+        background-position-x: -84px;
+    }
+    to{
+        background-position-x: -252px;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div class="titulo-superior">
+        <h1>SACHA REX</h1>
+        <p>Intenta que Sacha no destruya las casas y ciudades</p>
+    </div>
+
+    <div class="contenedor">
+
+        <div class="suelo"></div>
+        
+        <div class="dino dino-corriendo"></div>
+
+        <div class="score">0</div>
+
+    </div>
+
+    <div class="game-over">PERDISTE CAUSA</div>
+
+
+    <div class="marca-agua">
+        Creado por: anderxsa &nbsp;|&nbsp; Creado con Visual Studio Code <br>
+        Ya pe profe apruebame pue. 
+    </div>
+
+    <audio
+    id="audio-fondo"
+    src="Jeremih - oui.mp3"
+    autoplay
+    loop
+></audio>
+<script>
+
+// JUEGO SEGUIDO
+
+var time = new Date();
+var deltaTime = 0;
+
+if(document.readyState === "complete" || document.readyState === "interactive"){
+    setTimeout(Init, 1);
+}else{
+    document.addEventListener("DOMContentLoaded", Init); 
+}
+
+function Init() {
+    time = new Date();
+    Start();
+    Loop();
+}
+
+function Loop() {
+    deltaTime = (new Date() - time) / 1000;
+    time = new Date();
+    Update();
+    requestAnimationFrame(Loop);
+}
+
+//lOGICA
+
+var sueloY = 22;
+var velY = 0;
+var impulso = 900;
+var gravedad = 2500;
+
+var dinoPosX = 42;
+var dinoPosY = sueloY; 
+
+var sueloX = 0;
+var velEscenario = 1280/3;
+var gameVel = 1;
+var score = 0;
+
+var parado = false;
+var saltando = false;
+
+var tiempoHastaObstaculo = 2;
+var tiempoObstaculoMin = 0.7;
+var tiempoObstaculoMax = 1.8;
+var obstaculoPosY = 16;
+var obstaculos = [];
+
+var tiempoHastaNube = 0.5;
+var tiempoNubeMin = 0.7;
+var tiempoNubeMax = 2.7;
+var maxNubeY = 270;
+var minNubeY = 100;
+var nubes = [];
+var velNube = 0.5;
+
+var contenedor;
+var dino;
+var textoScore;
+var suelo;
+var gameOver;
+
+function Start() {
+    gameOver = document.querySelector(".game-over");
+    suelo = document.querySelector(".suelo");
+    contenedor = document.querySelector(".contenedor");
+    textoScore = document.querySelector(".score");
+    dino = document.querySelector(".dino");
+    document.addEventListener("keydown", HandleKeyDown);
+}
+
+function Update() {
+    if(parado) return;
+    
+    MoverDinosaurio();
+    MoverSuelo();
+    DecidirCrearObstaculos();
+    DecidirCrearNubes();
+    MoverObstaculos();
+    MoverNubes();
+    DetectarColision();
+
+    velY -= gravedad * deltaTime;
+}
+
+function HandleKeyDown(ev){
+    if(ev.keyCode == 32){
+        Saltar();
+    }
+}
+
+// SALTO
+// 
+var saltoTiempo = 0;
+var saltoEnCurso = false;
+var saltoInicioY = sueloY;
+var saltoImpulso = impulso;
+var saltoInicio = 0;
+
+function Saltar(){
+    if(dinoPosY === sueloY && !saltoEnCurso){
+        saltando = true;
+        saltoEnCurso = true;
+        saltoTiempo = 0;
+        saltoInicioY = sueloY;
+        saltoImpulso = impulso;
+        saltoInicio = performance.now() / 1000;
+        dino.classList.remove("dino-corriendo");
+    }
+}
+
+function MoverDinosaurio() {
+    if(saltoEnCurso){
+        saltoTiempo = (performance.now() / 1000) - saltoInicio;
+        // Ecuación cuadrática que use : y = y0 + v0*t - 0.5*g*t^2
+        dinoPosY = saltoInicioY + saltoImpulso * saltoTiempo - 0.5 * gravedad * Math.pow(saltoTiempo, 2);
+        if(dinoPosY <= sueloY){
+            TocarSuelo();
+            saltoEnCurso = false;
+        }
+    } else {
+        dinoPosY = sueloY;
+    }
+    dino.style.bottom = dinoPosY+"px";
+}
+
+function TocarSuelo() {
+    dinoPosY = sueloY;
+    velY = 0;
+    if(saltando){
+        dino.classList.add("dino-corriendo");
+    }
+    saltando = false;
+    saltoEnCurso = false;
+}
+
+function MoverSuelo() {
+    sueloX += CalcularDesplazamiento();
+    suelo.style.left = -(sueloX % contenedor.clientWidth) + "px";
+}
+
+function CalcularDesplazamiento() {
+    return velEscenario * deltaTime * gameVel;
+}
+
+function Estrellarse() {
+    dino.classList.remove("dino-corriendo");
+    dino.classList.add("dino-estrellado");
+    parado = true;
+}
+
+function DecidirCrearObstaculos() {
+    tiempoHastaObstaculo -= deltaTime;
+    if(tiempoHastaObstaculo <= 0) {
+        CrearObstaculo();
+    }
+}
+
+function DecidirCrearNubes() {
+    tiempoHastaNube -= deltaTime;
+    if(tiempoHastaNube <= 0) {
+        CrearNube();
+    }
+}
+
+function CrearObstaculo() {
+    var obstaculo = document.createElement("div");
+    contenedor.appendChild(obstaculo);
+    obstaculo.classList.add("cactus");
+    if(Math.random() > 0.5) obstaculo.classList.add("cactus2");
+    obstaculo.posX = contenedor.clientWidth;
+    obstaculo.style.left = contenedor.clientWidth+"px";
+
+    obstaculos.push(obstaculo);
+    tiempoHastaObstaculo = tiempoObstaculoMin + Math.random() * (tiempoObstaculoMax-tiempoObstaculoMin) / gameVel;
+}
+
+function CrearNube() {
+    var nube = document.createElement("div");
+    contenedor.appendChild(nube);
+    nube.classList.add("nube");
+    nube.posX = contenedor.clientWidth;
+    nube.style.left = contenedor.clientWidth+"px";
+    nube.style.bottom = minNubeY + Math.random() * (maxNubeY-minNubeY)+"px";
+    
+    nubes.push(nube);
+    tiempoHastaNube = tiempoNubeMin + Math.random() * (tiempoNubeMax-tiempoNubeMin) / gameVel;
+}
+
+function MoverObstaculos() {
+    for (var i = obstaculos.length - 1; i >= 0; i--) {
+        if(obstaculos[i].posX < -obstaculos[i].clientWidth) {
+            obstaculos[i].parentNode.removeChild(obstaculos[i]);
+            obstaculos.splice(i, 1);
+            GanarPuntos();
+        }else{
+            obstaculos[i].posX -= CalcularDesplazamiento();
+            obstaculos[i].style.left = obstaculos[i].posX+"px";
+        }
+    }
+}
+
+function MoverNubes() {
+    for (var i = nubes.length - 1; i >= 0; i--) {
+        if(nubes[i].posX < -nubes[i].clientWidth) {
+            nubes[i].parentNode.removeChild(nubes[i]);
+            nubes.splice(i, 1);
+        }else{
+            nubes[i].posX -= CalcularDesplazamiento() * velNube;
+            nubes[i].style.left = nubes[i].posX+"px";
+        }
+    }
+}
+
+function GanarPuntos() {
+    score++;
+    textoScore.innerText = score;
+    if(score == 5){
+        gameVel = 1.5;
+        contenedor.classList.add("mediodia");
+    }else if(score == 10) {
+        gameVel = 2;
+        contenedor.classList.add("tarde");
+    } else if(score == 20) {
+        gameVel = 3;
+        contenedor.classList.add("noche");
+    }
+    suelo.style.animationDuration = (3/gameVel)+"s";
+}
+
+function GameOver() {
+    Estrellarse();
+    gameOver.style.display = "block";
+}
+
+function ReiniciarJuego() {
+    // Restablecer lasvariables principales
+    parado = false;
+    saltando = false;
+    score = 0;
+    textoScore.innerText = score;
+    gameVel = 1;
+    dinoPosY = sueloY;
+    velY = 0;
+    sueloX = 0;
+    contenedor.classList.remove("mediodia", "tarde", "noche");
+
+    // Quitar obstáculos
+    obstaculos.forEach(function(obstaculo) {
+        if (obstaculo.parentNode) obstaculo.parentNode.removeChild(obstaculo);
+    });
+    obstaculos = [];
+
+    // Quitar nubes
+    nubes.forEach(function(nube) {
+        if (nube.parentNode) nube.parentNode.removeChild(nube);
+    });
+    nubes = [];
+
+    // muerte del dinosaurio
+    dino.classList.remove("dino-estrellado");
+    dino.classList.add("dino-corriendo");
+    dino.style.bottom = sueloY + "px";
+
+    // quitar mensaje de perdiste causa
+    gameOver.style.display = "none";
+}
+
+function DetectarColision() {
+    for (var i = 0; i < obstaculos.length; i++) {
+        if(obstaculos[i].posX > dinoPosX + dino.clientWidth) {
+            
+            break; //al estar en orden no puede chocar
+        }else{
+            if(IsCollision(dino, obstaculos[i], 10, 30, 15, 20)) {
+                GameOver();
+            }
+        }
+    }
+}
+
+function IsCollision(a, b, paddingTop, paddingRight, paddingBottom, paddingLeft) {
+    var aRect = a.getBoundingClientRect();
+    var bRect = b.getBoundingClientRect();
+
+    return !(
+        ((aRect.top + aRect.height - paddingBottom) < (bRect.top)) ||
+        (aRect.top + paddingTop > (bRect.top + bRect.height)) ||
+        ((aRect.left + aRect.width - paddingRight) < bRect.left) ||
+        (aRect.left + paddingLeft > (bRect.left + bRect.width))
+    );
+}
+
+// Reproductor del audio AGH AGH AGH
+window.addEventListener('DOMContentLoaded', function() {
+    var audio = document.getElementById('audio-fondo');
+    audio.volume = 0.5;
+    audio.play().catch(function(){});
+    function playAudio() {
+        audio.play().catch(function(){});
+        document.removeEventListener('keydown', playAudio);
+        document.removeEventListener('mousedown', playAudio);
+        document.removeEventListener('touchstart', playAudio);
+    }
+    document.addEventListener('keydown', playAudio);
+    document.addEventListener('mousedown', playAudio);
+    document.addEventListener('touchstart', playAudio);
+});
+
+// Reiniciar juego al hacer click en "PERDISTE CAUSA"
+document.querySelector('.game-over').addEventListener('click', function() {
+    ReiniciarJuego();
+});
+</script>
+</body>
+</html>
