@@ -1,8 +1,8 @@
 ## SACHA REX
-
+Haz que sacha no rompa los edificios, consigue los mejores puntos y rompe el ranking.
 ## Link del Juego
 
-https://anderxsa.github.io/Sacha-REX/
+https://anderxsa.github.io/SACHA-REX/
 (Se debe jugar si o si en Pc o Laptop)
 ## Explicacion de Creacion
 
