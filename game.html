@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SACHA REX</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+/* Cerros */
+
+.cerros {
+    width: 200%;
+    height: 160px;
+
+    position: absolute;
+    bottom: 42px;
+    left: 0;
+    z-index: 0;
+
+    background: url(img/cerros.png) repeat-x 0 100%;
+    background-size: auto 160px;
+}
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: url('Pantalla de inicio/fondo.png') center center / cover no-repeat fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .logo-sacha {
+            width: 600px;
+            max-width: 80vw;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            display: block;
+        }
+        .contenedor {
+            width: 95vw;
+            max-width: 1400px;
+            height: 70vh;
+            max-height: 600px;
+            min-height: 280px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(#b7d6c7, transparent) #fcfcfcff;
+            transition: background-color 1s linear;
+            overflow: hidden;
+            box-shadow: 0 0 40px #0006;
+            border: 6px solid #000;
+            border-radius: 18px;
+        }
+        @font-face {
+            font-family: 'Lovelo';
+            src: url('fonts/Lovelo.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Arcade';
+            src: url('ARCADE_N.TTF') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    height: 100vh;
+    background: url('Pantalla de inicio/fondo.png') center center / cover no-repeat fixed;
+    display: flex;
+    align-items: center;
+}
+
+.titulo-superior {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    font-family: 'Lovelo', Arial, sans-serif;
+}
+
+.titulo-superior h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.titulo-superior p {
+    font-size: 18px;
+}
+
+.mediodia {
+    background-color: #ffdcf3;
+}
+
+.tarde {
+    background-color: #428f88;
+}
+
+.noche {
+    background-color: #aca8c7;
+}
+
+
+.dino {
+    width: 100px;
+    height: 100px;
+
+    position: absolute;
+    bottom: 22px;
+    left: 42px;
+    z-index: 2;
+
+    background: url(img/dino.png) repeat-x 0px 0px;
+    background-size: 420px 105px;
+    background-position-x: 0px;
+
+}
+
+.dino-corriendo {
+    animation: animarDino 0.20s steps(2) infinite;
+}
+.dino-estrellado {
+    background-position-x: -315px;
+}
+
+.dino-saltando {
+    background-position-x: -210px;
+    transform: rotate(-15deg);
+    transition: transform 0.1s ease;
+}
+
+.trayectoria-punto {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Parabolas */
+.trail-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.suelo {
+    width: 200%;
+    height: 42px;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    background: url(img/suelo.png) repeat-x 0px 0px;
+    background-size: 50% 42px;
+
+}
+
+.cactus{
+    width: 58px;
+    height: 120px;
+
+    position: absolute;
+    bottom: 16px;
+    left: 600px;
+    z-index: 1;
+
+    background: url(img/cactus1.png) no-repeat;
+}
+.cactus2{
+    width: 123px;
+    height: 83px;
+
+    background: url(img/cactus2.png) no-repeat;
+}
+
+.cactus3{
+    width: 72px;
+    height: 130px;
+
+    background: url(img/cactus3.png) no-repeat;
+    background-size: contain;
+}
+.cactus4{
+    width: 95px;
+    height: 150px;
+
+    background: url(img/cactus4.png) no-repeat;
+    background-size: contain;
+}
+
+.nube{
+    width: 115px;
+    height: 33px;
+
+    position: absolute;
+    z-index: 0;
+
+    background: url(img/nube.png) no-repeat;
+    background-size: 115px 33px;
+}
+
+.score{
+    width: 100px;
+    height: 30px;
+
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    z-index: 10;
+
+    color: 
+    #f5f5f5;
+    font-family: 'Arcade', 'Lovelo', Verdana, sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.difficulty {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    z-index: 10;
+    color: #f5f5f5;
+    font-family: 'Arcade', 'Lovelo', Verdana, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.game-over{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+.game-over .overlay-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.game-over .title-img{
+    width: 480px;
+    max-width: 85vw;
+}
+.game-over .btn-retry{
+    width: 220px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+.game-over .btn-retry:hover{
+    transform: scale(1.05);
+}
+
+ 
+
+@keyframes animarDino{
+    from{
+        background-position-x: -105px;
+    }
+    to{
+        background-position-x: -315px;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <img src="Pantalla de inicio/logo.png" alt="SACHA REX" class="logo-sacha">
+    <div class="contenedor">
+
+        <div class="cerros"></div>
+        <div class="suelo"></div>
+        
+        <div class="dino dino-corriendo"></div>
+
+        <div class="score">0</div>
+
+    </div>
+
+    <div class="game-over">
+        <div class="overlay-box">
+            <img src="Pantalla de inicio/Game over.png" alt="Game Over" class="title-img" />
+            <img src="Pantalla de inicio/retry.png" alt="Retry" class="btn-retry" id="btn-retry" />
+        </div>
+    </div>
+
+
+    
+
+    <audio id="audio-fondo" src="Jeremih - oui.mp3" autoplay loop></audio>
+    <!-- sonido de sacha saltando XD-->
+    <audio id="sfx-jump" src="sounds effects/jump.mp3" preload="auto"></audio>
+    <audio id="sfx-gameover" src="sounds effects/gameover.mp3" preload="auto"></audio>
+<script>
+
+// JUEGO SEGUIDO
+
+var time = new Date();
+var deltaTime = 0;
+
+if(document.readyState === "complete" || document.readyState === "interactive"){
+    setTimeout(Init, 1);
+}else{
+    document.addEventListener("DOMContentLoaded", Init); 
+}
+
+function Init() {
+    time = new Date();
+    Start();
+    Loop();
+}
+
+function Loop() {
+    deltaTime = (new Date() - time) / 1000;
+    time = new Date();
+    Update();
+    requestAnimationFrame(Loop);
+}
+
+//lOGICA
+
+var sueloY = 22;
+var velY = 0;
+var impulso = 900;
+var gravedad = 2500;
+
+var dinoPosX = 42;
+var dinoPosY = sueloY; 
+
+var sueloX = 0;
+var velEscenario = 1280/3;
+var gameVel = 1;
+var score = 0;
+
+var parado = false;
+var saltando = false;
+
+var tiempoHastaObstaculo = 2.2;
+var tiempoObstaculoMin = 1.2;
+var tiempoObstaculoMax = 2.8;
+var obstaculoPosY = 16;
+var obstaculos = [];
+
+var tiempoHastaNube = 0.5;
+var tiempoNubeMin = 0.7;
+var tiempoNubeMax = 2.7;
+var maxNubeY = 270;
+var minNubeY = 100;
+var nubes = [];
+var velNube = 0.5;
+
+var contenedor;
+var dino;
+var textoScore;
+var suelo;
+var gameOver;
+var cerros;
+var trailCanvas;
+var trailCtx;
+var trailPoints = [];
+// Dificultad
+var dificultadEl;
+var dificultadActual = "Fácil";
+var difficultyIndex = 0;
+var difficulties = [
+    { name: "Fácil",   scoreMin: 0,  gameVel: 1.0, min: 1.2, max: 2.8, theme: "" },
+    { name: "Media",   scoreMin: 10, gameVel: 1.6, min: 1.0, max: 2.2, theme: "mediodia" },
+    { name: "Difícil", scoreMin: 25, gameVel: 2.2, min: 0.8, max: 1.8, theme: "tarde" }
+];
+
+// Sonidos
+var sfxJump;
+var sfxGameOver;
+var audioFondo;
+
+function Start() {
+    gameOver = document.querySelector(".game-over");
+    suelo = document.querySelector(".suelo");
+    cerros = document.querySelector(".cerros");
+    contenedor = document.querySelector(".contenedor");
+    textoScore = document.querySelector(".score");
+    dino = document.querySelector(".dino");
+    // etiqueta de dificultad
+    dificultadEl = document.createElement('div');
+    dificultadEl.className = 'difficulty';
+    dificultadEl.textContent = 'Dificultad: ' + dificultadActual;
+    contenedor.appendChild(dificultadEl);
+    trailCanvas = document.createElement('canvas');
+    trailCanvas.className = 'trail-canvas';
+    contenedor.appendChild(trailCanvas);
+    trailCtx = trailCanvas.getContext('2d');
+    RedimensionarTrailCanvas();
+    window.addEventListener('resize', RedimensionarTrailCanvas);
+    // Posición X inicial del dino
+    dino.style.left = dinoBaseX + "px";
+    // Sonidos
+    sfxJump = document.getElementById('sfx-jump');
+    sfxGameOver = document.getElementById('sfx-gameover');
+    audioFondo = document.getElementById('audio-fondo');
+    if (sfxJump) { sfxJump.volume = 0.7; }
+    if (sfxGameOver) { sfxGameOver.volume = 0.8; }
+    document.addEventListener("keydown", HandleKeyDown);
+    document.addEventListener("keyup", HandleKeyUp);
+    // click
+    document.addEventListener("mousedown", function(e){ e.preventDefault(); Saltar(); });
+    document.addEventListener("touchstart", function(e){ e.preventDefault(); Saltar(); }, { passive: false });
+
+    // Botón para volver a jugar
+    var btnRetry = document.getElementById('btn-retry');
+    if (btnRetry) {
+        btnRetry.addEventListener('click', function(){
+            // Detener sonido
+            if (sfxGameOver) { try { sfxGameOver.pause(); sfxGameOver.currentTime = 0; } catch(e){} }
+            ReiniciarJuego();
+            gameOver.style.display = 'none';
+        });
+    }
+
+    // Ajustar dificultad inicial
+    ActualizarDificultad();
+}
+
+function Update() {
+    if(parado) return;
+    
+    MoverDinosaurio();
+    MoverSuelo();
+    MoverCerros();
+    DecidirCrearObstaculos();
+    DecidirCrearNubes();
+    MoverObstaculos();
+    MoverNubes();
+    DetectarColision();
+
+    velY -= gravedad * deltaTime;
+}
+
+var teclaEspacioPresionada = false;
+
+function HandleKeyDown(ev){
+    if(ev.keyCode == 32){
+        ev.preventDefault(); // no scroll de página
+        if(!teclaEspacioPresionada){
+            teclaEspacioPresionada = true;
+            Saltar();
+        }
+    }
+}
+
+function HandleKeyUp(ev){
+    if(ev.keyCode == 32){
+        teclaEspacioPresionada = false;
+    }
+}
+
+// SALTO en movimiento
+// 
+var saltoTiempo = 0;
+var saltoEnCurso = false;
+var saltoInicioY = sueloY;
+var saltoInicio = 0;
+var saltoInicioX = 0;
+
+// Movimiento horizontal durante y después del salto
+var dinoBaseX = 42;          // Posición base
+var dinoReturnEnCurso = false;
+var dinoReturnInicio = 0;
+var dinoReturnDur = 0.25;    // Duración de retorno al punto base
+var saltoAvance = 95;        // Avance horizontal durante el salto
+
+function IsGrounded(){
+    return Math.abs(dinoPosY - sueloY) < 0.5 && !parado;
+}
+
+// Parámetros del salto parabólico
+var saltoDistancia = 275;
+var saltoAltura = 190; 
+var saltoDuracion = 0.9; 
+
+function Saltar(){
+    if(IsGrounded() && !saltoEnCurso){
+        saltando = true;
+        saltoEnCurso = true;
+        saltoTiempo = 0;
+        saltoInicioY = sueloY;
+        saltoInicio = performance.now() / 1000;
+        saltoInicioX = sueloX;
+        dino.classList.remove("dino-corriendo");
+        dino.classList.add("dino-saltando");
+        // Sonido de salto
+        if (sfxJump) { try { sfxJump.currentTime = 0; sfxJump.play(); } catch(e){} }
+    }
+}
+
+function MoverDinosaurio() {
+    if(saltoEnCurso){
+        saltoTiempo = (performance.now() / 1000) - saltoInicio;
+        
+        var progreso = saltoTiempo / saltoDuracion;
+    
+        if (progreso < 0) progreso = 0;
+        if (progreso > 1) progreso = 1;
+        if(progreso >= 1.0){
+            TocarSuelo();
+            saltoEnCurso = false;
+        } else {
+            // Ecuación parabólica cuadrática: y = 4h * x * (1 - x)
+            // donde x es el progreso (0 a 1) y h es la altura máxima esta ecuación crea una parábola perfecta que empieza y termina en y=0 y alcanza su máximo en x=0.5 osea la mitad del salto
+            dinoPosY = saltoInicioY + (4 * saltoAltura * progreso * (1 - progreso));
+
+            // Avance horizontal
+            var t = progreso;
+            var easeInOut = (t < 0.5) ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
+            dinoPosX = dinoBaseX + saltoAvance * easeInOut;
+            dino.style.left = dinoPosX + 'px';
+        }
+    } else {
+        dinoPosY = sueloY;
+        // volver al punto inicial
+        if (dinoReturnEnCurso){
+            var tRet = (performance.now()/1000 - dinoReturnInicio) / dinoReturnDur;
+            if (tRet >= 1){
+                dinoReturnEnCurso = false;
+                dinoPosX = dinoBaseX;
+            } else {
+                var k = 1 - Math.pow(1 - tRet, 3);
+                var fromX = dinoPosX; // posición actual al iniciar el retorno
+                dinoPosX = dinoBaseX + (fromX - dinoBaseX) * (1 - k);
+            }
+            dino.style.left = dinoPosX + 'px';
+        } else {
+            dinoPosX = dinoBaseX;
+            dino.style.left = dinoPosX + 'px';
+        }
+    }
+    dino.style.bottom = dinoPosY+"px";
+
+    ActualizarTrail();
+}
+
+function TocarSuelo() {
+    dinoPosY = sueloY;
+    velY = 0;
+    if(saltando){
+        dino.classList.remove("dino-saltando");
+        dino.classList.add("dino-corriendo");
+    }
+    saltando = false;
+    saltoEnCurso = false;
+    // volver al punto de inicio
+    dinoReturnEnCurso = true;
+    dinoReturnInicio = performance.now() / 1000;
+    trailPoints = [];
+    LimpiarTrailCanvas();
+}
+
+function MoverSuelo() {
+    sueloX += CalcularDesplazamiento();
+    suelo.style.left = -(sueloX % contenedor.clientWidth) + "px";
+}
+
+// cerros
+var cerrosX = 0;
+var velCerrosFactor = 0.35;
+function MoverCerros(){
+    if(!cerros) return;
+    cerrosX += CalcularDesplazamiento() * velCerrosFactor;
+    cerros.style.left = -(cerrosX % contenedor.clientWidth) + "px";
+}
+
+function CalcularDesplazamiento() {
+    return velEscenario * deltaTime * gameVel;
+}
+
+function Estrellarse() {
+    dino.classList.remove("dino-corriendo", "dino-saltando");
+    dino.classList.add("dino-estrellado");
+    parado = true;
+    saltoEnCurso = false;
+    saltando = false;
+    dinoReturnEnCurso = false;
+    trailPoints = [];
+    LimpiarTrailCanvas();
+}
+
+function DecidirCrearObstaculos() {
+    tiempoHastaObstaculo -= deltaTime;
+    if(tiempoHastaObstaculo <= 0) {
+        CrearObstaculo();
+    }
+}
+
+function DecidirCrearNubes() {
+    tiempoHastaNube -= deltaTime;
+    if(tiempoHastaNube <= 0) {
+        CrearNube();
+    }
+}
+
+function CrearObstaculo() {
+    var obstaculo = document.createElement("div");
+    contenedor.appendChild(obstaculo);
+    obstaculo.classList.add("cactus");
+    var variante = Math.floor(Math.random() * 4) + 1;
+    if (variante === 2) {
+        obstaculo.classList.add("cactus2");
+    } else if (variante === 3) {
+        obstaculo.classList.add("cactus3");
+    } else if (variante === 4) {
+        obstaculo.classList.add("cactus4");
+    }
+    obstaculo.posX = contenedor.clientWidth;
+    obstaculo.style.left = contenedor.clientWidth+"px";
+
+    obstaculos.push(obstaculo);
+    tiempoHastaObstaculo = tiempoObstaculoMin + Math.random() * (tiempoObstaculoMax-tiempoObstaculoMin) / gameVel;
+}
+
+function CrearNube() {
+    var nube = document.createElement("div");
+    contenedor.appendChild(nube);
+    nube.classList.add("nube");
+    nube.posX = contenedor.clientWidth;
+    nube.style.left = contenedor.clientWidth+"px";
+    nube.style.bottom = minNubeY + Math.random() * (maxNubeY-minNubeY)+"px";
+    
+    nubes.push(nube);
+    tiempoHastaNube = tiempoNubeMin + Math.random() * (tiempoNubeMax-tiempoNubeMin) / gameVel;
+}
+
+
+function MoverObstaculos() {
+    for (var i = obstaculos.length - 1; i >= 0; i--) {
+        if(obstaculos[i].posX < -obstaculos[i].clientWidth) {
+            obstaculos[i].parentNode.removeChild(obstaculos[i]);
+            obstaculos.splice(i, 1);
+            GanarPuntos();
+        }else{
+            obstaculos[i].posX -= CalcularDesplazamiento();
+            obstaculos[i].style.left = obstaculos[i].posX+"px";
+        }
+    }
+}
+
+function MoverNubes() {
+    for (var i = nubes.length - 1; i >= 0; i--) {
+        if(nubes[i].posX < -nubes[i].clientWidth) {
+            nubes[i].parentNode.removeChild(nubes[i]);
+            nubes.splice(i, 1);
+        }else{
+            nubes[i].posX -= CalcularDesplazamiento() * velNube;
+            nubes[i].style.left = nubes[i].posX+"px";
+        }
+    }
+}
+
+function GanarPuntos() {
+    score++;
+    textoScore.innerText = score;
+    // niveles y movimiento del suelo p
+    ActualizarDificultad();
+}
+
+function GameOver() {
+    Estrellarse();
+    gameOver.style.display = "flex";
+    // Sonido cuando muere
+    if (sfxGameOver) { try { sfxGameOver.currentTime = 0; sfxGameOver.play(); } catch(e){} }
+    if (audioFondo) { try { audioFondo.pause(); } catch(e){} }
+}
+
+function ReiniciarJuego() {
+    // Restablecer lasvariables principales
+    parado = false;
+    saltando = false;
+    score = 0;
+    textoScore.innerText = score;
+    gameVel = 1;
+    dinoPosY = sueloY;
+    velY = 0;
+    sueloX = 0;
+    contenedor.classList.remove("mediodia", "tarde", "noche");
+    // Asegurar que el sonido al perder pare p
+    if (typeof sfxGameOver !== 'undefined' && sfxGameOver) {
+        try { sfxGameOver.pause(); sfxGameOver.currentTime = 0; } catch(e){}
+    }
+
+    // Quitar obstáculos
+    obstaculos.forEach(function(obstaculo) {
+        if (obstaculo.parentNode) obstaculo.parentNode.removeChild(obstaculo);
+    });
+    obstaculos = [];
+
+    // Quitar nubes
+    nubes.forEach(function(nube) {
+        if (nube.parentNode) nube.parentNode.removeChild(nube);
+    });
+    nubes = [];
+
+    // muerte del dinosaurio
+    dino.classList.remove("dino-estrellado", "dino-saltando");
+    dino.classList.add("dino-corriendo");
+    dino.style.bottom = sueloY + "px";
+    dinoPosX = dinoBaseX;
+    dino.style.left = dinoPosX + 'px';
+    dinoReturnEnCurso = false;
+    trailPoints = [];
+    LimpiarTrailCanvas();
+
+    // quitar mensaje de perdiste causa
+    gameOver.style.display = "none";
+
+    // Restablecer dificultad
+    ActualizarDificultad(true);
+
+    // Reanudar música de fondo
+    if (audioFondo) { try { audioFondo.play().catch(function(){}); } catch(e){} }
+}
+function ActualizarDificultad(forceReset){
+    var idx = 0;
+    for (var i = difficulties.length - 1; i >= 0; i--){
+        if (score >= difficulties[i].scoreMin){ idx = i; break; }
+    }
+    difficultyIndex = idx;
+    var prof = difficulties[idx];
+    dificultadActual = prof.name;
+    gameVel = prof.gameVel;
+    tiempoObstaculoMin = prof.min;
+    tiempoObstaculoMax = prof.max;
+    dificultadEl.textContent = 'Dificultad: ' + dificultadActual;
+
+  /*tiempos*/
+    contenedor.classList.remove("mediodia", "tarde", "noche");
+    if (prof.theme){ contenedor.classList.add(prof.theme); }
+
+    suelo.style.animationDuration = (3/gameVel)+"s";
+
+    if (forceReset){
+        tiempoHastaObstaculo = tiempoObstaculoMin + Math.random() * (tiempoObstaculoMax - tiempoObstaculoMin) / gameVel;
+    }
+}
+
+// parabola
+function RedimensionarTrailCanvas(){
+    if(!trailCanvas) return;
+    trailCanvas.width = contenedor.clientWidth;
+    trailCanvas.height = contenedor.clientHeight;
+}
+
+function LimpiarTrailCanvas(){
+    if(!trailCtx) return;
+    trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+}
+
+function ActualizarTrail(){
+    if(!trailCtx) return;
+    if(saltoEnCurso){
+        // botonn
+        var centerX = (dinoPosX || dinoBaseX) + dino.clientWidth/2;
+        var bottomY = dinoPosY;
+        var canvasY = trailCanvas.height - (bottomY + dino.clientHeight/2);
+        trailPoints.push({x: centerX, y: canvasY});
+        DibujarTrail();
+    }
+}
+
+function DibujarTrail(){
+    if(trailPoints.length < 2) return;
+    trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+    trailCtx.beginPath();
+    for (var i=0; i<trailPoints.length; i++){
+        var p = trailPoints[i];
+        if(i===0) trailCtx.moveTo(p.x, p.y);
+        else trailCtx.lineTo(p.x, p.y);
+    }
+    trailCtx.strokeStyle = 'rgba(255,255,255,0.9)';
+    trailCtx.lineWidth = 1.5;
+    trailCtx.lineJoin = 'round';
+    trailCtx.lineCap = 'round';
+    trailCtx.stroke();
+}
+
+function DetectarColision() {
+    for (var i = 0; i < obstaculos.length; i++) {
+        if(obstaculos[i].posX > dinoPosX + dino.clientWidth) {
+            
+            break; //al estar en orden no puede chocar
+        }else{
+            if(IsCollision(dino, obstaculos[i], 12, 36, 18, 24)) {
+                GameOver();
+            }
+        }
+    }
+}
+
+function IsCollision(a, b, paddingTop, paddingRight, paddingBottom, paddingLeft) {
+    var aRect = a.getBoundingClientRect();
+    var bRect = b.getBoundingClientRect();
+
+    return !(
+        ((aRect.top + aRect.height - paddingBottom) < (bRect.top)) ||
+        (aRect.top + paddingTop > (bRect.top + bRect.height)) ||
+        ((aRect.left + aRect.width - paddingRight) < bRect.left) ||
+        (aRect.left + paddingLeft > (bRect.left + bRect.width))
+    );
+}
+
+// Reproductor del audio AGH AGH AGH
+window.addEventListener('DOMContentLoaded', function() {
+    var audio = document.getElementById('audio-fondo');
+    audio.volume = 0.5;
+    audio.play().catch(function(){});
+    function playAudio() {
+        audio.play().catch(function(){});
+        document.removeEventListener('keydown', playAudio);
+        document.removeEventListener('mousedown', playAudio);
+        document.removeEventListener('touchstart', playAudio);
+    }
+    document.addEventListener('keydown', playAudio);
+    document.addEventListener('mousedown', playAudio);
+    document.addEventListener('touchstart', playAudio);
+});
+
+</script>
+</body>
+</html>
