@@ -4,6 +4,10 @@ Haz que sacha no rompa los edificios, consigue los mejores puntos y rompe el ran
 
 https://anderxsa.github.io/SACHA-REX/
 (Se debe jugar si o si en Pc o Laptop)
+Instrucciones:
+-Para saltar usa la tecla espacio
+-Para volver a empezar dele click al texto "Perdiate Causa
+(un amigo mio llego a los 500 puntos)
 ## Explicacion de Creacion
 
 Este juego usa ecuación cuadrática en la siguiente parte del código:
