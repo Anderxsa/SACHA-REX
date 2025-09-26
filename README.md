@@ -2,8 +2,10 @@
 
 ## Link del Juego
 
-https://anderxsa.github.io/Sacha-REX/
+https://anderxsa.github.io/SACHA-REX/
+
 (Se debe jugar si o si en Pc o Laptop)
+
 ## Instrucciones
 
 -Para saltar dele click o presiona la tecla espacio
